@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/onskycloud/structs"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -17,8 +18,21 @@ const (
 	DefautlLogLocation = "./logs"
 )
 
+// A Logger represents an active logging object that generates lines
+// of JSON output to an io.Writer. Each logging operation makes a single
+// call to the Writer's Write method. There is no guaranty on access
+// serialization to the Writer. If your Writer is not thread safe,
+// you may consider a sync wrapper.
+type Logger struct {
+	w       zerolog.LevelWriter
+	level   zerolog.Level
+	sampler zerolog.Sampler
+	context []byte
+	hooks   []zerolog.Hook
+}
+
 // Init config log
-func Init(logLevel int, logLocation string, logBucket string) (*zerolog.Logger, *os.File, error) {
+func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File, error) {
 	var f *os.File
 	if logBucket == "" {
 		logBucket = DefautlLogBucket
@@ -59,8 +73,9 @@ func Init(logLevel int, logLocation string, logBucket string) (*zerolog.Logger, 
 }
 
 // Config - custom time format for logger of empty string to use default
-func Config(lvl int, file *os.File) (*zerolog.Logger, error) {
+func Config(lvl int, file *os.File) (*Logger, error) {
 	var logLevel zerolog.Level
+	logger := &Logger{}
 	//! File
 	if file != nil {
 		log.Logger = log.Output(file)
@@ -86,6 +101,7 @@ func Config(lvl int, file *os.File) (*zerolog.Logger, error) {
 	}
 	zerolog.SetGlobalLevel(logLevel)
 	log.Logger = log.With().Caller().Logger()
+	structs.Merge(logger, log.Logger)
 
-	return &log.Logger, nil
+	return logger, nil
 }

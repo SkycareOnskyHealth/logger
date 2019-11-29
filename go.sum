@@ -1,4 +1,14 @@
+github.com/AdrianLungu/decimal v0.0.0-20160513203630-9d980d3d4d03/go.mod h1:9/eJh32Tuj2UIuAT4Tp2Ah6XueCU9Kk9tAgZHHVLIdM=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
+github.com/fatih/structs v1.1.0 h1:Q7juDM0QtcnhCpeyLGQKyg4TOIghuNXrkL32pHAUMxo=
+github.com/fatih/structs v1.1.0/go.mod h1:9NiDSp5zOcgEDl+j00MP/WkGVPOlPRLejGD8Ga6PJ7M=
+github.com/mitchellh/mapstructure v1.1.2 h1:fmNYVwqnSfB9mZU6OS2O6GsXM+wcskZDuKQzvN1EDeE=
+github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
+github.com/onskycloud/marshaller v0.0.0-20191023123315-0a6e1912a507 h1:dN3/hb8YukYJTs7CAcBxx0XU0fvqEjaNDkX1USg/tPw=
+github.com/onskycloud/marshaller v0.0.0-20191023123315-0a6e1912a507/go.mod h1:wet3AqmXBLMOM5Lq3rOC0aBECJRsnO0wnr9Z/8hxKHk=
+github.com/onskycloud/structs v0.0.0-20191029050048-42ed8e73f65a h1:RuqmZv0IdIzK/QwozEtscOyUlHODIGdp7DrOaW+Zkxs=
+github.com/onskycloud/structs v0.0.0-20191029050048-42ed8e73f65a/go.mod h1:1ZCgLrmY4yAoLtbw1iKrSPuw4LOo+DPORYYJtA1zao4=
+github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/rs/xid v1.2.1/go.mod h1:+uKXf+4Djp6Md1KODXJxgGQPKngRmWyn10oCKFzNHOQ=
 github.com/rs/zerolog v1.17.2 h1:RMRHFw2+wF7LO0QqtELQwo8hqSmqISyCJeFeAAuWcRo=
