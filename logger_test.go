@@ -1,6 +1,7 @@
 package logger_test
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
@@ -8,7 +9,7 @@ import (
 )
 
 func TestContainer(t *testing.T) {
-	logLevel := 1
+	logLevel := 0
 	logLocation := ""
 	logBucket := ""
 
@@ -21,4 +22,9 @@ func testLog(t *testing.T, logLevel int, logLocation string, logBucket string) {
 		fmt.Printf("err:%+v\n", err)
 		t.Fatal("log fail")
 	}
+	err = errors.New("some error")
+	logger.Warn().Err(err).Msg("test warn")
+	logger.Debug().Err(err).Msg("test debug")
+	logger.Err(err).Msg("test error")
+	t.Log("ok")
 }

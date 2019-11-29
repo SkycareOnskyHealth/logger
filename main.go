@@ -3,6 +3,7 @@ package logger
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"time"
 
@@ -29,6 +30,11 @@ type Logger struct {
 	sampler zerolog.Sampler
 	context []byte
 	hooks   []zerolog.Hook
+}
+
+// Context configures a new sub-logger with contextual fields.
+type Context struct {
+	l Logger
 }
 
 // Init config log
@@ -65,15 +71,15 @@ func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File
 		return nil, f, err
 	}
 
-	logger, err := Config(logLevel, f)
+	logger, err := config(logLevel, f)
 	if err != nil {
 		return nil, f, err
 	}
 	return logger, f, nil
 }
 
-// Config - custom time format for logger of empty string to use default
-func Config(lvl int, file *os.File) (*Logger, error) {
+// config - custom time format for logger of empty string to use default
+func config(lvl int, file *os.File) (*Logger, error) {
 	var logLevel zerolog.Level
 	logger := &Logger{}
 	//! File
@@ -104,4 +110,93 @@ func Config(lvl int, file *os.File) (*Logger, error) {
 	structs.Merge(logger, log.Logger)
 
 	return logger, nil
+}
+
+// Output duplicates the global logger and sets w as its output.
+func (l *Logger) Output(w io.Writer) zerolog.Logger {
+	return log.Output(w)
+}
+
+// With creates a child logger with the field added to its context.
+func (l *Logger) With() zerolog.Context {
+	return log.With()
+}
+
+// Err starts a new message with error level with err as a field if not nil or
+// with info level if err is nil.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Err(err error) *zerolog.Event {
+	return log.Err(err)
+}
+
+// Trace starts a new message with trace level.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Trace() *zerolog.Event {
+	return log.Trace()
+}
+
+// Debug starts a new message with debug level.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Debug() *zerolog.Event {
+	return log.Debug()
+}
+
+// Info starts a new message with info level.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Info() *zerolog.Event {
+	return l.Info()
+}
+
+// Warn starts a new message with warn level.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Warn() *zerolog.Event {
+	return log.Warn()
+}
+
+// Error starts a new message with error level.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Error() *zerolog.Event {
+	return log.Error()
+}
+
+// Fatal starts a new message with fatal level. The os.Exit(1) function
+// is called by the Msg method.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Fatal() *zerolog.Event {
+	return log.Fatal()
+}
+
+// Panic starts a new message with panic level. The message is also sent
+// to the panic function.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Panic() *zerolog.Event {
+	return log.Panic()
+}
+
+// Log starts a new message with no level. Setting GlobalLevel to
+// Disabled will still disable events produced by this method.
+//
+// You must call Msg on the returned event in order to send the event.
+func (l *Logger) Log() *zerolog.Event {
+	return log.Log()
+}
+
+// Print sends a log event using debug level and no extra field.
+// Arguments are handled in the manner of fmt.Print.
+func (l *Logger) Print(v ...interface{}) {
+	log.Print(v...)
+}
+
+// Printf sends a log event using debug level and no extra field.
+// Arguments are handled in the manner of fmt.Printf.
+func (l *Logger) Printf(format string, v ...interface{}) {
+	log.Printf(format, v...)
 }
