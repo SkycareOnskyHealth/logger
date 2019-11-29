@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -17,6 +18,8 @@ const (
 	DefautlLogBucket = "log"
 	// DefautlLogLocation default location to log
 	DefautlLogLocation = "./logs"
+	// DefaultServiceName default service name in log
+	DefaultServiceName = "default"
 )
 
 // A Logger represents an active logging object that generates lines
@@ -38,13 +41,16 @@ type Context struct {
 }
 
 // Init config log
-func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File, error) {
+func Init(serviceName string, logLevel int, logLocation string, logBucket string) (*Logger, *os.File, error) {
 	var f *os.File
 	if logBucket == "" {
 		logBucket = DefautlLogBucket
 	}
 	if logLocation == "" {
 		logLocation = DefautlLogLocation
+	}
+	if serviceName == "" {
+		serviceName = DefaultServiceName
 	}
 	// Init logger
 	currentTime := time.Now()
@@ -69,7 +75,7 @@ func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File
 		return nil, f, err
 	}
 
-	logger, err := config(logLevel, f)
+	logger, err := config(logLevel, f, serviceName)
 	if err != nil {
 		return nil, f, err
 	}
@@ -77,7 +83,7 @@ func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File
 }
 
 // config - custom time format for logger of empty string to use default
-func config(lvl int, file *os.File) (*Logger, error) {
+func config(lvl int, file *os.File, serviceName string) (*Logger, error) {
 	var logLevel zerolog.Level
 	logger := &Logger{}
 	//! File
@@ -104,7 +110,7 @@ func config(lvl int, file *os.File) (*Logger, error) {
 		logLevel = zerolog.InfoLevel
 	}
 	zerolog.SetGlobalLevel(logLevel)
-	log.Logger = log.With().Caller().Logger()
+	log.Logger = log.With().Caller().Str("service", serviceName).Logger()
 	structs.Merge(logger, log.Logger)
 
 	return logger, nil
@@ -118,6 +124,21 @@ func (l *Logger) Output(w io.Writer) zerolog.Logger {
 // With creates a child logger with the field added to its context.
 func (l *Logger) With() zerolog.Context {
 	return log.With()
+}
+
+// Level creates a child logger with the minimum accepted level set to level.
+func (l *Logger) Level(level zerolog.Level) zerolog.Logger {
+	return log.Level(level)
+}
+
+// Sample returns a logger with the s sampler.
+func Sample(s zerolog.Sampler) zerolog.Logger {
+	return log.Sample(s)
+}
+
+// Hook returns a logger with the h Hook.
+func Hook(h zerolog.Hook) zerolog.Logger {
+	return log.Hook(h)
 }
 
 // Err starts a new message with error level with err as a field if not nil or
@@ -179,6 +200,13 @@ func (l *Logger) Panic() *zerolog.Event {
 	return log.Panic()
 }
 
+// WithLevel starts a new message with level.
+//
+// You must call Msg on the returned event in order to send the event.
+func WithLevel(level zerolog.Level) *zerolog.Event {
+	return log.WithLevel(level)
+}
+
 // Log starts a new message with no level. Setting GlobalLevel to
 // Disabled will still disable events produced by this method.
 //
@@ -197,4 +225,10 @@ func (l *Logger) Print(v ...interface{}) {
 // Arguments are handled in the manner of fmt.Printf.
 func (l *Logger) Printf(format string, v ...interface{}) {
 	log.Printf(format, v...)
+}
+
+// Ctx returns the Logger associated with the ctx. If no logger
+// is associated, a disabled logger is returned.
+func Ctx(ctx context.Context) *zerolog.Logger {
+	return zerolog.Ctx(ctx)
 }
