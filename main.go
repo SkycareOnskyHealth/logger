@@ -49,9 +49,8 @@ func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File
 	// Init logger
 	currentTime := time.Now()
 	filePath := fmt.Sprintf("%s/%s-%s.log", logLocation, logBucket, currentTime.Format("02-01-2006"))
-	if _, err := os.Stat(filePath); err != nil {
+	if _, err := os.Stat(logLocation); err != nil {
 		if os.IsNotExist(err) {
-			fmt.Println("not exists")
 			// path/to/whatever does *not* exist
 			err = os.Mkdir(logLocation, 0755)
 			if err != nil {
@@ -59,7 +58,6 @@ func Init(logLevel int, logLocation string, logBucket string) (*Logger, *os.File
 			}
 
 		} else {
-			fmt.Println("else")
 			// Schrodinger: file may or may not exist. See err for details.
 
 			// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
