@@ -13,16 +13,17 @@ func TestContainer(t *testing.T) {
 	logLocation := ""
 	logBucket := ""
 	serviceName := ""
-
-	testLog(t, serviceName, logLevel, logLocation, logBucket)
+	devLog := false
+	testLog(t, serviceName, logLevel, logLocation, logBucket, devLog)
 
 }
-func testLog(t *testing.T, serviceName string, logLevel int, logLocation string, logBucket string) {
-	logger, file, err := logger.Init(serviceName, logLevel, logLocation, logBucket)
-	if err != nil || file == nil || logger == nil {
+func testLog(t *testing.T, serviceName string, logLevel int, logLocation string, logBucket string, devLog bool) {
+	logger, file, err := logger.Init(serviceName, logLevel, logLocation, logBucket, devLog)
+	if err != nil || logger == nil {
 		fmt.Printf("err:%+v\n", err)
 		t.Fatal("log fail")
 	}
+	defer file.Close()
 	err = errors.New("some error")
 	teststr := Tester{
 		Name:   "test",

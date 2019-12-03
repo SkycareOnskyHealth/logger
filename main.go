@@ -41,7 +41,7 @@ type Context struct {
 }
 
 // Init config log
-func Init(serviceName string, logLevel int, logLocation string, logBucket string) (*Logger, *os.File, error) {
+func Init(serviceName string, logLevel int, logLocation string, logBucket string, devLog bool) (*Logger, *os.File, error) {
 	var f *os.File
 	if logBucket == "" {
 		logBucket = DefautlLogBucket
@@ -75,7 +75,7 @@ func Init(serviceName string, logLevel int, logLocation string, logBucket string
 		return nil, f, err
 	}
 
-	logger, err := config(logLevel, f, serviceName)
+	logger, err := config(logLevel, f, serviceName, devLog)
 	if err != nil {
 		return nil, f, err
 	}
@@ -83,11 +83,11 @@ func Init(serviceName string, logLevel int, logLocation string, logBucket string
 }
 
 // config - custom time format for logger of empty string to use default
-func config(lvl int, file *os.File, serviceName string) (*Logger, error) {
+func config(lvl int, file *os.File, serviceName string, devLog bool) (*Logger, error) {
 	var logLevel zerolog.Level
 	logger := &Logger{}
 	//! File
-	if file != nil {
+	if devLog == false {
 		log.Logger = log.Output(file)
 	}
 	//!
