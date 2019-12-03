@@ -41,12 +41,14 @@ type Context struct {
 }
 
 // Init config log
-func Init(serviceName string, logLevel int, logLocation string, logBucket string, devLog bool) (*Logger, *os.File, error) {
+func Init(serviceName string, logLevel int, logLocation string, logBucket string) (*Logger, *os.File, error) {
 	var f *os.File
+	prodLog := true
 	if logBucket == "" {
 		logBucket = DefautlLogBucket
 	}
 	if logLocation == "" {
+		prodLog = false
 		logLocation = DefautlLogLocation
 	}
 	if serviceName == "" {
@@ -75,7 +77,7 @@ func Init(serviceName string, logLevel int, logLocation string, logBucket string
 		return nil, f, err
 	}
 
-	logger, err := config(logLevel, f, serviceName, devLog)
+	logger, err := config(logLevel, f, serviceName, prodLog)
 	if err != nil {
 		return nil, f, err
 	}
@@ -83,11 +85,11 @@ func Init(serviceName string, logLevel int, logLocation string, logBucket string
 }
 
 // config - custom time format for logger of empty string to use default
-func config(lvl int, file *os.File, serviceName string, devLog bool) (*Logger, error) {
+func config(lvl int, file *os.File, serviceName string, prodLog bool) (*Logger, error) {
 	var logLevel zerolog.Level
 	logger := &Logger{}
 	//! File
-	if devLog == false {
+	if prodLog == true {
 		log.Logger = log.Output(file)
 	}
 	//!
