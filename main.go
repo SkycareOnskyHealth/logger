@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/onskycloud/structs"
+	"github.com/SkycareOnskyHealth/structs"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )

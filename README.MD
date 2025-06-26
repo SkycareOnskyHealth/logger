@@ -1,8 +1,8 @@
 # Logger Helper
 
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://github.com/onskycloud/logger)
+[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://github.com/SkycareOnskyHealth/logger)
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/onskycloud/logger)
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/SkycareOnskyHealth/logger)
 
 Log using zero log
 
@@ -23,7 +23,7 @@ Request handler requires [Go](https://golang.org/) v1.11+ to run.
 Install the package.
 
 ```sh
-$ go get github.com/onskycloud/logger
+$ go get github.com/SkycareOnskyHealth/logger
 ```
 
 #### Kubernetes + Google Cloud

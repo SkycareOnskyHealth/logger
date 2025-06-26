@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/onskycloud/logger"
+	"github.com/SkycareOnskyHealth/logger"
 )
 
 func TestContainer(t *testing.T) {
